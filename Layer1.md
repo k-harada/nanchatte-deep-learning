@@ -86,7 +86,6 @@ logit9 <- glm((train_label==9)~.,data=train49)
 ここでは誤分類率が低ければよしとします。(モデル構築時は対数尤度ですが)  
 
 ```
-
 # fit
 trainfit <- data.frame(
   p0 = 1 / (1 + exp(-1*predict(logit0,data=train49))),
@@ -110,5 +109,7 @@ table(trainres,train_label)
 # Categorization Accuracy
 mean(trainres == train_label)
 ```
+うん、まあまあの精度ですね。  
+
 
 
