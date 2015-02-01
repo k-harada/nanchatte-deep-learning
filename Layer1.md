@@ -122,6 +122,18 @@ mean(trainres == train_label)
 数式書くのめんどい・・・  
 
 ```
+train49_mat <- cbind(train_label,array(train_array_49,dim=c(28000,49)))
+# check
+# image(matrix(train49_mat[1,-1],ncol=7))
+# image(matrix(train49_mat[2,-1],ncol=7))
+
+# answers
+answer_mat <- matrix(0,nrow=28000,ncol=10)
+for (i in seq(10)){
+  answer_mat[train49_mat[,1]==(i-1),i] <- 1
+}
+
+
 # learn weights
 W <- matrix(0.0,nrow=10,ncol=49)
 intercept <- rep(0.0,length=10)
@@ -138,5 +150,11 @@ for (i in seq(28000)){
   intercept <- intercept + eta * (answer_mat[i,] - output)
   
 }
+
+output_mat <- 1 / (1 + exp(-1*(train49_mat[,-1] %*% t(W) + matrix(1,nrow=28000,ncol=1) %*% matrix(intercept,ncol=10))))
+
+trainres <- max.col(as.matrix(output_mat)) - 1
+table(trainres,train_label)
+mean(trainres == train_label)
 ```
 
