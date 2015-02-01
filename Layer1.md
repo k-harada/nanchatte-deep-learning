@@ -7,8 +7,8 @@
 http://www.kaggle.com/c/digit-recognizer
 
 
-### 1.1 Logistic Regression
-
+## 1.1 Logistic Regression
+### 普通の方法
 データを読み込んで、trainからvalidデータ切り出して、モデルを10個作ります。  
 つまり、0かそうでないかを判別するモデル、1かそうでないかを判別するモデル、・・・  
 
@@ -111,5 +111,8 @@ mean(trainres == train_label)
 ```
 うん、まあまあの精度ですね。  
 
+
+### ニューラルネットワークっぽくする
+今のモデルをニューラルネットワークっぽく作りましょう。  
 
 
