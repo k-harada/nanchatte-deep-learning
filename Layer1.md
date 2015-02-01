@@ -121,5 +121,22 @@ mean(trainres == train_label)
 ##### 数学的な整理
 数式書くのめんどい・・・  
 
+```
+# learn weights
+W <- matrix(0.0,nrow=10,ncol=49)
+intercept <- rep(0.0,length=10)
 
+# learn rate
+eta <- 0.001
+
+for (i in seq(28000)){
+  # feed forward
+  output <- 1 / (1 + exp(-1*(W %*% train49_mat[i,-1] + intercept)))
+
+  # back propagation
+  W <- W + eta * (answer_mat[i,] - output) %*% t(train49_mat[i,-1])
+  intercept <- intercept + eta * (answer_mat[i,] - output)
+  
+}
+```
 
