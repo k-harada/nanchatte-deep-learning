@@ -1,3 +1,13 @@
+<head>
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });
+	</script>
+	<script type="text/javascript"
+	  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+	</script>
+	<meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+</head>
+
 ## 第1層 データマイニング手法からNeural Networkへ
 
 この章では、読者が慣れ親しんだデータマイニング手法を、ニューラルネットワークに置き換えます。  
@@ -158,6 +168,5 @@ table(trainres,train_label)
 mean(trainres == train_label)
 ```
 
-```mathjax
-2^3=8
-```
+
+$x_{i}=2^3=8$
