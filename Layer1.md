@@ -10,7 +10,7 @@ http://www.kaggle.com/c/digit-recognizer
 ### 1.1 Logistic Regression
 
 データを読み込んで、trainからvalidデータ切り出して、モデルを10個作ります。  
-0かそうでないかを判別するモデル、1かそうでないかを判別するモデル、・・・  
+つまり、0かそうでないかを判別するモデル、1かそうでないかを判別するモデル、・・・  
 
 ##### データ準備
 まずはデータを読み込んで、使いやすい形に準備します。  
@@ -58,5 +58,26 @@ for (i in seq(7)){
 # image(train_array_49[2,,])
 ```
 
+##### モデル構築
+Rのデータフレームに変換して、glmで作ります。
 
+```
+train49 <- as.data.frame(cbind(train_label,array(train_array_49,dim=c(28000,49))))
+# check
+# image(matrix(as.numeric(train49[1,-1]),ncol=7))
+# image(matrix(as.numeric(train49[2,-1]),ncol=7))
+
+
+# logistic regression
+logit0 <- glm((train_label==0)~.,data=train49)
+logit1 <- glm((train_label==1)~.,data=train49)
+logit2 <- glm((train_label==2)~.,data=train49)
+logit3 <- glm((train_label==3)~.,data=train49)
+logit4 <- glm((train_label==4)~.,data=train49)
+logit5 <- glm((train_label==5)~.,data=train49)
+logit6 <- glm((train_label==6)~.,data=train49)
+logit7 <- glm((train_label==7)~.,data=train49)
+logit8 <- glm((train_label==8)~.,data=train49)
+logit9 <- glm((train_label==9)~.,data=train49)
+```
 
