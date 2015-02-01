@@ -158,3 +158,6 @@ table(trainres,train_label)
 mean(trainres == train_label)
 ```
 
+```mathjax
+2^3=8
+```
