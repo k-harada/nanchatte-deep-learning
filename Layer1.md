@@ -84,3 +84,31 @@ logit9 <- glm((train_label==9)~.,data=train49)
 10個のモデルができました。最も大きな確率を返したものが、このモデル(群)としての出力とします。  
 ちょっと精度を見てみましょう。  
 ここでは誤分類率が低ければよしとします。(モデル構築時は対数尤度ですが)  
+
+```
+
+# fit
+trainfit <- data.frame(
+  p0 = 1 / (1 + exp(-1*predict(logit0,data=train49))),
+  p1 = 1 / (1 + exp(-1*predict(logit1,data=train49))),
+  p2 = 1 / (1 + exp(-1*predict(logit2,data=train49))),
+  p3 = 1 / (1 + exp(-1*predict(logit3,data=train49))),
+  p4 = 1 / (1 + exp(-1*predict(logit4,data=train49))),
+  p5 = 1 / (1 + exp(-1*predict(logit5,data=train49))),
+  p6 = 1 / (1 + exp(-1*predict(logit6,data=train49))),
+  p7 = 1 / (1 + exp(-1*predict(logit7,data=train49))),
+  p8 = 1 / (1 + exp(-1*predict(logit8,data=train49))),
+  p9 = 1 / (1 + exp(-1*predict(logit9,data=train49)))
+)
+
+
+trainres <- max.col(as.matrix(trainfit)) - 1
+
+# confusion matrix
+table(trainres,train_label)
+
+# Categorization Accuracy
+mean(trainres == train_label)
+```
+
+
