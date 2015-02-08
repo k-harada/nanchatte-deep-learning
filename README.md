@@ -8,10 +8,8 @@ R Markdownで作っています。
 RPubで見た方が多分見やすいです。  
 数式の説明とか図とかはそのうち追記します。
 
-##### 第1層
-http://rpubs.com/k-harada/layer1
-##### 第2層
-http://rpubs.com/k-harada/layer2
+第1層:http://rpubs.com/k-harada/layer1  
+第2層:http://rpubs.com/k-harada/layer2  
 
 
 ### 想定読者のレベル
@@ -29,3 +27,10 @@ http://rpubs.com/k-harada/layer2
 * 意図的に嘘はつきませんが、記事の内容が間違ってたらゴメンなさい。
 * 売れないと思うけど、勝手にコピペして商売はしないでください。
 
+### 参考文献
+* ニューラルネットワークと深層学習(日本語訳):  
+http://nnadl-ja.github.io/nnadl_site_ja/index.html
+* 人工知能学会誌の連載解説（特に第４回）:  
+http://www.kamishima.net/2013/05/edit-tutorial-deeplearning/
+* deeplearning.netのチュートリアル:  
+http://www.deeplearning.net/tutorial/contents.html
