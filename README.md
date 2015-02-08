@@ -5,10 +5,14 @@
 当面はCNNにフォーカスします。  
 
 R Markdownで作っています。  
-RPubで見た方が多分見やすいです。
+RPubで見た方が多分見やすいです。  
+数式の説明とか図とかはそのうち追記します。
 
 ##### 第1層
 http://rpubs.com/k-harada/layer1
+##### 第2層
+http://rpubs.com/k-harada/layer2
+
 
 ### 想定読者のレベル
 * 大学1年生くらいの数学は頑張って調べられる  
