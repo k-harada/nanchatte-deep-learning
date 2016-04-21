@@ -1,0 +1,439 @@
+---
+title: "1.4.1 誤り訂正学習 "
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+手書き文字(digit)認識をします。データは下記からダウンロードしてください。  
+http://www.kaggle.com/c/digit-recognizer
+
+```{r}
+setwd("C:/Users/k-harada/Desktop/kdd/digit/ORG")
+library(data.table)
+library(dplyr)
+traindata <- fread("train.csv")
+testdata <- fread("test.csv")
+
+train_label <- traindata$label[1:28000]
+valid_label <- traindata$label[28001:42000]
+
+# transform into array
+train_array <- array(as.matrix(traindata[1:28000, ])[,-1],dim=c(28000,28,28))
+valid_array <- array(as.matrix(traindata[28001:42000, ])[,-1],dim=c(14000,28,28))
+```
+
+image(行列)で画像っぽくPlotに出力されます。適宜チェックしてください。  
+
+```{r}
+# check
+image(train_array[1,,], ylim=c(1, 0))
+# image(train_array[2,,], ylim=c(1, 0))
+# image(train_array[3,,], ylim=c(1, 0))
+# image(train_array[4,,], ylim=c(1, 0))
+# image(train_array[5,,], ylim=c(1, 0))
+# image(train_array[6,,], ylim=c(1, 0))
+# image(train_array[7,,], ylim=c(1, 0))
+# image(train_array[8,,], ylim=c(1, 0))
+# image(train_array[9,,], ylim=c(1, 0))
+```
+
+
+0-9のそれぞれに対応する学習器を作ります。  
+まず0をやってみます。 
+```{r}
+# 初期条件
+set.seed(0)
+w0 <- matrix(rnorm(28*28), nrow=28)
+b0 <- 0
+image(w0, ylim=c(1, 0))
+```
+
+学習率を設定して、誤り訂正学習をします。  
+
+```{r}
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w0 * train_array[i,,]) + b0 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 0, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w0 <- w0 + eta * (t - y) * train_array[i,,]
+    b0 <- b0 + eta * (t - y) * 1
+  }
+}
+
+
+```
+
+結果を見てみます。
+
+```{r}
+y0 <- rep(0, 28000)
+t0 <- rep(0, 28000)
+for (i in seq(28000)){
+  y0[i] <- ifelse(sum(w0 * train_array[i,,]) + b0 >= 0, 1, 0)
+  t0[i] <- ifelse(train_label[i] == 0, 1, 0)
+}
+image(w0, ylim=c(1, 0))
+# y0:出力 
+# t0:こたえ
+table(y0, t0)
+```
+
+
+1-9についてもそれぞれやってみます
+
+```{r, echo=FALSE}
+set.seed(0)
+w1 <- matrix(rnorm(28*28), nrow=28)
+b1 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w1 * train_array[i,,]) + b1 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 1, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w1 <- w1 + eta * (t - y) * train_array[i,,]
+    b1 <- b1 + eta * (t - y) * 1
+  }
+}
+```
+
+
+```{r, echo=FALSE}
+set.seed(0)
+w2 <- matrix(rnorm(28*28), nrow=28)
+b2 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w2 * train_array[i,,]) + b2 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 2, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w2 <- w2 + eta * (t - y) * train_array[i,,]
+    b2 <- b2 + eta * (t - y) * 1
+  }
+}
+```
+
+
+```{r, echo=FALSE}
+set.seed(0)
+w3 <- matrix(rnorm(28*28), nrow=28)
+b3 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w3 * train_array[i,,]) + b3 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 3, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w3 <- w3 + eta * (t - y) * train_array[i,,]
+    b3 <- b3 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w4 <- matrix(rnorm(28*28), nrow=28)
+b4 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w4 * train_array[i,,]) + b4 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 4, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w4 <- w4 + eta * (t - y) * train_array[i,,]
+    b4 <- b4 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w5 <- matrix(rnorm(28*28), nrow=28)
+b5 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w5 * train_array[i,,]) + b5 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 5, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w5 <- w5 + eta * (t - y) * train_array[i,,]
+    b5 <- b5 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w6 <- matrix(rnorm(28*28), nrow=28)
+b6 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w6 * train_array[i,,]) + b6 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 6, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w6 <- w6 + eta * (t - y) * train_array[i,,]
+    b6 <- b6 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w7 <- matrix(rnorm(28*28), nrow=28)
+b7 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w7 * train_array[i,,]) + b7 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 7, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w7 <- w7 + eta * (t - y) * train_array[i,,]
+    b7 <- b7 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w8 <- matrix(rnorm(28*28), nrow=28)
+b8 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w8 * train_array[i,,]) + b8 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 8, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w8 <- w8 + eta * (t - y) * train_array[i,,]
+    b8 <- b8 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+set.seed(0)
+w9 <- matrix(rnorm(28*28), nrow=28)
+b9 <- 0
+eta <- 0.01
+for (i in seq(28000)){
+  y <- ifelse(sum(w9 * train_array[i,,]) + b9 >= 0, 1, 0)
+  t <- ifelse(train_label[i] == 9, 1, 0)
+  if (y == t){
+    next
+  } else {
+    w9 <- w9 + eta * (t - y) * train_array[i,,]
+    b9 <- b9 + eta * (t - y) * 1
+  }
+}
+```
+
+```{r, echo=FALSE}
+y1 <- rep(0, 28000)
+t1 <- rep(0, 28000)
+for (i in seq(28000)){
+  y1[i] <- ifelse(sum(w1 * train_array[i,,]) + b1 >= 0, 1, 0)
+  t1[i] <- ifelse(train_label[i] == 1, 1, 0)
+}
+```
+
+```{r}
+image(w1, ylim=c(1, 0))
+# y1:出力 
+# t1:こたえ
+table(y1, t1)
+```
+
+
+```{r, echo=FALSE}
+y2 <- rep(0, 28000)
+t2 <- rep(0, 28000)
+for (i in seq(28000)){
+  y2[i] <- ifelse(sum(w2 * train_array[i,,]) + b2 >= 0, 1, 0)
+  t2[i] <- ifelse(train_label[i] == 2, 1, 0)
+}
+```
+
+```{r}
+image(w2, ylim=c(1, 0))
+# y2:出力 
+# t2:こたえ
+table(y2, t2)
+```
+
+
+```{r, echo=FALSE}
+y3 <- rep(0, 28000)
+t3 <- rep(0, 28000)
+for (i in seq(28000)){
+  y3[i] <- ifelse(sum(w3 * train_array[i,,]) + b3 >= 0, 1, 0)
+  t3[i] <- ifelse(train_label[i] == 3, 1, 0)
+}
+```
+
+```{r}
+image(w3, ylim=c(1, 0))
+# y3:出力 
+# t3:こたえ
+table(y3, t3)
+```
+
+
+```{r, echo=FALSE}
+y4 <- rep(0, 28000)
+t4 <- rep(0, 28000)
+for (i in seq(28000)){
+  y4[i] <- ifelse(sum(w4 * train_array[i,,]) + b4 >= 0, 1, 0)
+  t4[i] <- ifelse(train_label[i] == 4, 1, 0)
+}
+```
+
+```{r}
+image(w4, ylim=c(1, 0))
+# y4:出力 
+# t4:こたえ
+table(y4, t4)
+```
+
+
+```{r, echo=FALSE}
+y5 <- rep(0, 28000)
+t5 <- rep(0, 28000)
+for (i in seq(28000)){
+  y5[i] <- ifelse(sum(w5 * train_array[i,,]) + b5 >= 0, 1, 0)
+  t5[i] <- ifelse(train_label[i] == 5, 1, 0)
+}
+```
+
+```{r}
+image(w5, ylim=c(1, 0))
+# y5:出力 
+# t5:こたえ
+table(y5, t5)
+```
+
+```{r, echo=FALSE}
+y6 <- rep(0, 28000)
+t6 <- rep(0, 28000)
+for (i in seq(28000)){
+  y6[i] <- ifelse(sum(w6 * train_array[i,,]) + b6 >= 0, 1, 0)
+  t6[i] <- ifelse(train_label[i] == 6, 1, 0)
+}
+```
+
+```{r}
+image(w6, ylim=c(1, 0))
+# y6:出力 
+# t6:こたえ
+table(y6, t6)
+```
+
+```{r, echo=FALSE}
+y7 <- rep(0, 28000)
+t7 <- rep(0, 28000)
+for (i in seq(28000)){
+  y7[i] <- ifelse(sum(w7 * train_array[i,,]) + b7 >= 0, 1, 0)
+  t7[i] <- ifelse(train_label[i] == 7, 1, 0)
+}
+```
+
+```{r}
+image(w7, ylim=c(1, 0))
+# y7:出力 
+# t7:こたえ
+table(y7, t7)
+```
+
+
+```{r, echo=FALSE}
+y8 <- rep(0, 28000)
+t8 <- rep(0, 28000)
+for (i in seq(28000)){
+  y8[i] <- ifelse(sum(w8 * train_array[i,,]) + b8 >= 0, 1, 0)
+  t8[i] <- ifelse(train_label[i] == 8, 1, 0)
+}
+```
+
+```{r}
+image(w8, ylim=c(1, 0))
+# y8:出力 
+# t8:こたえ
+table(y8, t8)
+```
+
+```{r, echo=FALSE}
+y9 <- rep(0, 28000)
+t9 <- rep(0, 28000)
+for (i in seq(28000)){
+  y9[i] <- ifelse(sum(w9 * train_array[i,,]) + b9 >= 0, 1, 0)
+  t9[i] <- ifelse(train_label[i] == 9, 1, 0)
+}
+```
+
+```{r}
+image(w9, ylim=c(1, 0))
+# y9:出力 
+# t9:こたえ
+table(y9, t9)
+```
+
+## 合計の精度を確認  
+ここでは一番強く反応したものを正解とする  
+
+#### 学習用データ
+
+```{r}
+yall <- matrix(rep(0, 280000), ncol=10)
+for (i in seq(28000)){
+  yall[i, 1] <- sum(w0 * train_array[i,,]) + b0
+  yall[i, 2] <- sum(w1 * train_array[i,,]) + b1
+  yall[i, 3] <- sum(w2 * train_array[i,,]) + b2
+  yall[i, 4] <- sum(w3 * train_array[i,,]) + b3
+  yall[i, 5] <- sum(w4 * train_array[i,,]) + b4
+  yall[i, 6] <- sum(w5 * train_array[i,,]) + b5
+  yall[i, 7] <- sum(w6 * train_array[i,,]) + b6
+  yall[i, 8] <- sum(w7 * train_array[i,,]) + b7
+  yall[i, 9] <- sum(w8 * train_array[i,,]) + b8
+  yall[i,10] <- sum(w9 * train_array[i,,]) + b9
+}
+yall_res <- max.col(yall) - 1
+
+table(yall_res, train_label)
+mean(yall_res == train_label)
+```
+
+#### 検証用データ
+
+```{r}
+yall_valid <- matrix(rep(0, 140000), ncol=10)
+for (i in seq(14000)){
+  yall_valid[i, 1] <- sum(w0 * valid_array[i,,]) + b0
+  yall_valid[i, 2] <- sum(w1 * valid_array[i,,]) + b1
+  yall_valid[i, 3] <- sum(w2 * valid_array[i,,]) + b2
+  yall_valid[i, 4] <- sum(w3 * valid_array[i,,]) + b3
+  yall_valid[i, 5] <- sum(w4 * valid_array[i,,]) + b4
+  yall_valid[i, 6] <- sum(w5 * valid_array[i,,]) + b5
+  yall_valid[i, 7] <- sum(w6 * valid_array[i,,]) + b6
+  yall_valid[i, 8] <- sum(w7 * valid_array[i,,]) + b7
+  yall_valid[i, 9] <- sum(w8 * valid_array[i,,]) + b8
+  yall_valid[i,10] <- sum(w9 * valid_array[i,,]) + b9
+}
+yall_valid_res <- max.col(yall_valid) - 1
+
+table(yall_valid_res, valid_label)
+mean(yall_valid_res == valid_label)
+```

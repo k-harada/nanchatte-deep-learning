@@ -1,0 +1,83 @@
+---
+title: "1.4.2 誤差逆伝搬"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+手書き文字(digit)認識をします。データは下記からダウンロードしてください。  
+http://www.kaggle.com/c/digit-recognizer
+
+```{r}
+setwd("C:/Users/k-harada/Desktop/kdd/digit/ORG")
+library(data.table)
+library(dplyr)
+traindata <- fread("train.csv")
+testdata <- fread("test.csv")
+
+train_label <- traindata$label[1:28000]
+valid_label <- traindata$label[28001:42000]
+
+# do not resize here
+# /255 so that range in 0-1
+train_mat <- as.matrix(traindata[1:28000, ])[, -1]/255
+valid_mat <- as.matrix(traindata[28001:42000, ])[,-1]/255
+```
+
+#### サンプルのニューラルネット
+中間層1層のニューラルネットを作成します
+
+```{r}
+# 答えの用意
+answer_mat <- matrix(0, nrow = 28000, ncol = 10)
+for (i in seq(10)) {
+    answer_mat[train_label == (i - 1), i] <- 1
+}
+
+# learn weights
+set.seed(0)
+W1 <- matrix(rnorm(28*28*50), ncol=28*28)
+intercept1 <- rep(-0.5, length = 50)
+
+W2 <- matrix(0, nrow = 10, ncol = 50)
+intercept2 <- rep(0, length = 10)
+
+# learn rate
+eta1 <- 0.01
+eta2 <- 0.01
+for (loop in seq(5)){
+  for (i in seq(28000)) {
+      # feed forward
+      output1 <- 1/(1 + exp(-1 * (W1 %*% train_mat[i, ] + intercept1)))
+      output2 <- 1/(1 + exp(-1 * (W2 %*% output1 + intercept2)))
+      # back propagation
+      W2 <- W2 + eta2 * (answer_mat[i, ] - output2) %*% t(output1)
+      intercept2 <- intercept2 + eta2 * (answer_mat[i, ] - output2)
+      W1 <- W1 + eta1 * ((output1 * (1 - output1)) * (t(W2) %*% (answer_mat[i, ] - output2))) %*% t(train_mat[i, ])
+      intercept1 <- intercept1 + eta1 * (output1 * (1 - output1)) * (t(W2) %*% (answer_mat[i, ] - output2))
+  }
+}
+```
+
+
+
+#### 学習結果の確認
+```{r}
+output_mat1 <- 1/(1 + exp(-1 * (train_mat %*% t(W1) + matrix(1, nrow = 28000, ncol = 1) %*% matrix(intercept1, ncol = 50))))
+output_mat2 <- 1/(1 + exp(-1 * (output_mat1 %*% t(W2) + matrix(1, nrow = 28000, ncol = 1) %*% matrix(intercept2, ncol = 10))))
+
+output_mat1_v <- 1/(1 + exp(-1 * (valid_mat %*% t(W1) + matrix(1, nrow = 14000, ncol = 1) %*% matrix(intercept1, ncol = 50))))
+output_mat2_v <- 1/(1 + exp(-1 * (output_mat1_v %*% t(W2) + matrix(1, nrow = 14000, ncol = 1) %*% matrix(intercept2, ncol = 10))))
+
+# 出力
+trainres <- max.col(as.matrix(output_mat2)) - 1
+validres <- max.col(as.matrix(output_mat2_v)) - 1
+
+table(trainres, train_label)
+mean(trainres == train_label)
+table(validres, valid_label)
+mean(validres == valid_label)
+```
